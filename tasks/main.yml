@@ -1,0 +1,20 @@
+---
+# tasks file for ansible-role-win-choco-packages
+- name: Check if Chocolatey is installed
+  win_shell: choco --version
+  register: choco_check
+  ignore_errors: true
+
+- name: Install Chocolatey
+  win_shell: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+  args:
+    executable: powershell.exe
+  register: choco_install
+  when: choco_check.rc != 0
+  changed_when: "'Chocolatey is now ready' in choco_install.stdout"
+
+- name: Install applications
+  win_chocolatey:
+    name: '{{ item }}'
+    state: present
+  loop: '{{ choco_packages }}'
