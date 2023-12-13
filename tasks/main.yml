@@ -5,11 +5,11 @@
   register: choco_check
   ignore_errors: true
 
-  #Copy Chocolate File to temp folder
-  - name: Copy Chocolatey File
-    win_copy:
-      src: "Chocolatey.ps1"
-      dest: "C:\temp\"
+#Copy Chocolate File to temp folder
+- name: Copy Chocolatey File
+  win_copy:
+    src: "Chocolatey.ps1"
+    dest: "C:\\temp\\"
 
 - name: Install Chocolatey
   win_shell: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex C:\temp\Chocolatey.ps1
